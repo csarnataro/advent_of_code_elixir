@@ -3,7 +3,7 @@ defmodule Day08Part1 do
     # NOTES about optimizations
     #
     # It took 4.48619 seconds to get the result, with the initial naive approach
-    # How long will it take with multiprocess and other optimizations?
+    # How long will it take with some optimization?
     #
     # step 1: with
     #         - for comprehension
@@ -11,7 +11,7 @@ defmodule Day08Part1 do
     #         - filter results and counting them instead of adding them to the full matrix and then reducing it
     # It took 0.204323 seconds to get the result (~20x faster)
     #
-    # step 2: adding multiprocess
+    # step 2: maybe adding multiprocess?
     #
     #
 
@@ -41,14 +41,6 @@ defmodule Day08Part1 do
   def transpose_matrix(m) do
     Enum.zip_with(m, & &1)
   end
-
-  # def async_protection_level(grid, x, y) do
-  #   # IO.puts("******** BEGIN: day_08_part_1:32 ********")
-  #   pid = spawn(fn -> protection_level(grid, x, y) end)
-  #   # IO.inspect(pid)
-  #   # IO.puts("********   END: day_08_part_1:32 ********")
-  #   pid
-  # end
 
   def doit(input) do
     grid =
