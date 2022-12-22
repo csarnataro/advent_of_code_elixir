@@ -6,7 +6,9 @@ defmodule Day08Part2 do
 
   def puzzle do
     content = File.read!("data/day_08/puzzle.txt")
-    doit(content)
+    {uSecs, result} = :timer.tc(Day08Part2, :doit, [content])
+    IO.puts("It took #{uSecs / 1_000_000} seconds to get the result")
+    result
   end
 
   def doit(input) do
@@ -15,27 +17,31 @@ defmodule Day08Part2 do
       |> Enum.map(fn line -> String.graphemes(line) end)
       |> Enum.map(&Enum.map(&1, fn v -> String.to_integer(v) end))
 
-      visible_trees =
-        grid
-        |> Enum.with_index()
-        |> Enum.map(fn {row, y} ->
-          row
-          |> (&Range.new(0, length(&1) - 1)).()
-          |> Enum.map(fn x -> how_many_visible_trees(grid, x, y) end)
-        end)
+    transposed_grid = Day08Part1.transpose_matrix(grid)
 
-      visible_trees
-      |> Enum.map(&Enum.sort(&1, :desc))
-      |> Enum.map(&Enum.at(&1, 0))
-      |> Enum.max()
+    visible_trees =
+      grid
+      |> Enum.with_index()
+      |> Enum.map(fn {row, y} ->
+        row
+        |> (&Range.new(0, length(&1) - 1)).()
+        |> Enum.map(fn x -> total_visible_trees(grid, transposed_grid, x, y) end)
+      end)
+
+    IO.inspect(visible_trees)
+
+    visible_trees
+    |> Enum.map(&Enum.sort(&1, :desc))
+    |> Enum.map(&Enum.at(&1, 0))
+    |> Enum.max()
 
   end
 
-  def how_many_visible_trees(grid, x, y) do
+  def total_visible_trees(grid, transposed_grid, x, y) do
     how_many_visible_trees(grid, x, y, :left) *
     how_many_visible_trees(grid, x, y, :right) *
-    how_many_visible_trees(grid, x, y, :top) *
-    how_many_visible_trees(grid, x, y, :bottom)
+    how_many_visible_trees(transposed_grid, x, y, :top) *
+    how_many_visible_trees(transposed_grid, x, y, :bottom)
   end
 
   def how_many_visible_trees(grid, x, y, :right) do
@@ -62,12 +68,12 @@ defmodule Day08Part2 do
   end
 
   def how_many_visible_trees(grid, x, y, :bottom) do
-    Day08Part1.transpose_matrix(grid)
+    grid
     |> how_many_visible_trees(y, x, :right)
   end
 
   def how_many_visible_trees(grid, x, y, :top) do
-    Day08Part1.transpose_matrix(grid)
+    grid
     |> how_many_visible_trees(y, x, :left)
   end
 end
