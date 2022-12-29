@@ -24,17 +24,25 @@ defmodule Day09Test do
 
   @tag :skip
   test "day 9, part 1, expand multiple lines input" do
-    input =
-      """
-      R 4
-      U 4
-      L 3
-      """
+    input = """
+    R 4
+    U 4
+    L 3
+    """
+
     assert Day09Part1.expand(input) == [
-      :r, :r, :r, :r,
-      :u, :u, :u, :u,
-      :l, :l, :l,
-    ]
+             :r,
+             :r,
+             :r,
+             :r,
+             :u,
+             :u,
+             :u,
+             :u,
+             :l,
+             :l,
+             :l
+           ]
   end
 
   @tag :skip
@@ -57,8 +65,10 @@ defmodule Day09Test do
 
   @tag :skip
   test "day 9, part 1, move/3 from same position right 1" do
-    %{:positions => {{1, 0}, {0, 0}} = positions} = Day09Part1.move(%{:positions => {{0, 0}, {0, 0}}, :visited => MapSet.new()}, :r, {0, 0})
-    assert positions== {{1, 0}, {0, 0}}
+    %{:positions => {{1, 0}, {0, 0}} = positions} =
+      Day09Part1.move(%{:positions => {{0, 0}, {0, 0}}, :visited => MapSet.new()}, :r, {0, 0})
+
+    assert positions == {{1, 0}, {0, 0}}
     # assert Day09Part1.move({{3, 4}, {3, 4}}, :r, {0, 0}) == {{4, 4}, {3, 4}}
   end
 
@@ -75,27 +85,30 @@ defmodule Day09Test do
   end
 
   test "day 9, part 2, sample" do
-    assert Day09Part2.sample() == 0
+    assert Day09Part2.sample() == 1
   end
-  test "day 9, part 2, sample 2" do
-    assert Day09Part2.sample() == 36
-  end
-
 
   test "day 9, part 2, move 10 knots rope" do
-    initial_positions = Tuple.duplicate({0,0}, 10)
-    assert Day09Part2.move_10_knots_rope(%{:positions => initial_positions, :visited => nil}, :u) == {
-      {0,1},
-      {0,0},
-      {0,0},
-      {0,0},
-      {0,0},
-      {0,0},
-      {0,0},
-      {0,0},
-      {0,0},
-      {0,0}
-    }
-  end
+    initial_positions = List.duplicate({0, 0}, 10)
 
+    assert Day09Part2.move_rope(
+             %{
+               :positions => initial_positions,
+               :visited => MapSet.new()
+             },
+             :u
+           ).positions ==
+             [
+               {0, 1},
+               {0, 0},
+               {0, 0},
+               {0, 0},
+               {0, 0},
+               {0, 0},
+               {0, 0},
+               {0, 0},
+               {0, 0},
+               {0, 0}
+             ]
+  end
 end

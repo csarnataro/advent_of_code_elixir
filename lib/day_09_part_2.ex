@@ -1,16 +1,5 @@
 defmodule Day09Part2 do
-  @moduledoc """
 
-  Example:\
-  {{4,2}, {4,1}} first tuple is position of head, second tuple is position of tail
-  difference vector is {0, -1}
-
-  ......
-  ....H.
-  ....T.
-  ......
-
-  """
   def sample do
     content = File.read!("data/day_09/sample.txt")
     doit(content)
@@ -63,111 +52,20 @@ defmodule Day09Part2 do
     end
   end
 
-  def move(acc, direction) do
-    positions = acc.positions
+  def move_rope(acc, direction) do
+    [head | rest] = acc.positions
+    new_head_position = move_head(head, direction)
+    prev_positions = [new_head_position | rest]
 
-    old_head_position = Enum.at(positions, 0)
-    new_head_position = move_head(old_head_position, direction)
-    new_positions = [new_head_position]
+    new_positions = Enum.reduce(prev_positions, %{:prev => new_head_position, :positions => []}, fn knot, acc ->
+      diff = diff_between_points(acc.prev, knot)
+      knot_move = knot_move(diff)
+      knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
+      %{:positions => [knot_position | acc.positions], :prev => knot_position}
+    end)
 
-    # all_moves = for current_position <- 1..9 do
-    #   knot = Enum.at(positions, current_position)
-    #   diff = diff_between_points(List.first(new_positions), knot)
-    #   knot_move = knot_move(diff)
-    #   knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    #   new_positions = [knot_position | new_positions]
-    # end
-
-    # new_positions = [new_positions | all_moves]
-
-    # IO.puts("******** BEGIN: day_09_part_2:78 ********")
-    # IO.inspect(new_positions)
-    # IO.puts("********   END: day_09_part_2:78 ********")
-
-    # # for current_position <- 1..9 do
-    # #   knot = Enum.at(positions, current_position)
-    # #   diff = diff_between_points(List.first(new_positions), knot)
-
-    # #   knot_move = knot_move(diff)
-    # #   knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    # #   new_positions = [knot_position | new_positions]
-    # # end
-
-    current_position = 1
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 2
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 3
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 4
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 5
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 6
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 7
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 8
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-    current_position = 9
-    knot = Enum.at(positions, current_position)
-    diff = diff_between_points(List.first(new_positions), knot)
-
-    knot_move = knot_move(diff)
-    knot_position = {elem(knot, 0) + elem(knot_move, 0), elem(knot, 1) + elem(knot_move, 1)}
-    new_positions = [knot_position | new_positions]
-
-
-    visited = MapSet.put(acc.visited, List.first(new_positions))
-    %{:positions => Enum.reverse(new_positions), :visited => visited, :step => acc.step + 1}
+    visited = MapSet.put(acc.visited, List.first(new_positions.positions))
+    %{:positions => Enum.reverse(new_positions.positions), :visited => visited}
   end
 
   def move_head(p, :r), do: {elem(p, 0) + 1, elem(p, 1) + 0}
@@ -181,7 +79,7 @@ defmodule Day09Part2 do
     |> Enum.reduce(
       %{:positions => List.duplicate({0, 0}, 10), :visited => MapSet.new(), :step => 0},
       fn direction, acc ->
-        move(acc, direction)
+        move_rope(acc, direction)
       end
     )
     |> Map.get(:visited)
