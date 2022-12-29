@@ -28,8 +28,6 @@ defmodule Day08Part2 do
         |> Enum.map(fn x -> total_visible_trees(grid, transposed_grid, x, y) end)
       end)
 
-    IO.inspect(visible_trees)
-
     visible_trees
     |> Enum.map(&Enum.sort(&1, :desc))
     |> Enum.map(&Enum.at(&1, 0))
