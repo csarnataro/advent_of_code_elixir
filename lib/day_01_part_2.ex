@@ -28,7 +28,6 @@ defmodule Day01Part2 do
       |> Map.fetch(:cal)
       |> case do {:ok, v} -> v;  _ -> [] end
       |> Enum.sort()
-      # |> tap(&IO.inspect(&1))
       |> Enum.take(-3)
       |> Enum.sum()
   end

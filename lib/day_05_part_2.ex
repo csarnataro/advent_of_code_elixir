@@ -87,18 +87,12 @@ defmodule Day05Part2 do
 
     # compacted = compact_cranes(c)
     Enum.reduce(instructions, crates, fn element, acc ->
-      IO.puts("ACC:")
-      IO.inspect(acc)
-      IO.puts("INSTR:")
-      IO.inspect(element)
       n = move(
         acc,
         elem(Integer.parse(element["number"]), 0),
         elem(Integer.parse(element["from"]), 0),
         elem(Integer.parse(element["to"]), 0)
         )
-      IO.puts("RESULT:")
-      IO.inspect(n)
       n
     end)
     |> Enum.map(fn s -> String.last(s) end)

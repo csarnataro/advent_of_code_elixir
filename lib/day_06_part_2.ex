@@ -14,7 +14,6 @@ defmodule Day06Part2 do
       -1
     else
       first_four = Enum.take(content, 14)
-      IO.puts(first_four)
       if valid_marker?(first_four) do
         n + 14
       else

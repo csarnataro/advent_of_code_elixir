@@ -1,7 +1,7 @@
 defmodule Day08Test do
   use ExUnit.Case
 
-  @tag :skip
+  @tag :no_skip
   test "day 8, part 1" do
     assert Day08Part1.sample() == 21
   end
@@ -55,13 +55,13 @@ defmodule Day08Test do
 
   @tag :nskip
   test "day 8, part 2, how_many_visible_trees on the bottom" do
-    grid = [
+    grid = Day08Part1.transpose_matrix([
       [3, 0, 3, 7, 3 ],
       [2, 5, 5, 1, 2 ],
       [6, 5, 3, 3, 2 ],
       [3, 3, 5, 4, 9 ],
       [3, 5, 3, 9, 0 ]
-    ]
+    ])
 
     assert Day08Part2.how_many_visible_trees(grid, 1, 1, :bottom) == 1
 
@@ -73,13 +73,13 @@ defmodule Day08Test do
   end
 
   test "day 8, part 2, how_many_visible_trees on the top" do
-    grid = [
+    grid = Day08Part1.transpose_matrix([
       [3, 0, 3, 7, 3 ],
       [2, 5, 5, 1, 2 ],
       [6, 5, 3, 3, 2 ],
       [3, 3, 5, 4, 9 ],
       [3, 5, 3, 9, 0 ]
-    ]
+    ])
 
     assert Day08Part2.how_many_visible_trees(grid, 1, 1, :top) == 1
     assert Day08Part2.how_many_visible_trees(grid, 3, 2, :top) == 2
